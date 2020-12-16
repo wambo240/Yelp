@@ -10,12 +10,8 @@ var firebaseConfig = {
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-
-
 showSelectedItem();
-
-
-document.getElementById("buttonAddFavourite").onclick = addToFavourite;
+document.getElementById("buttonAddFavorites").onclick = addToFavorites;
 var property
 function showSelectedItem()
 {
@@ -24,26 +20,20 @@ function showSelectedItem()
     document.getElementById("location").innerHTML = "Location:  "+property.location;
     document.getElementById("gps-location").innerHTML = "GPS-Location:  "+property.gpsLocation;
 }
-
-
 function showLoading() {
   var x = document.getElementById("loading");
   x.style.display = "block";
 }
-
 function hideLoading() {
   var x = document.getElementById("loading");
   x.style.display = "none";
 }
-
-
-function addToFavourite(){
-
+function addToFavorites(){
   showLoading();
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
-          firebase.database().ref('users/' + user.uid + '/favourite').push().set({
+          firebase.database().ref('users/' + user.uid + '/Favorites').push().set({
             title: property.title,
             location: property.location,
             gpsLocation: property.gpsLocation
@@ -59,7 +49,6 @@ function addToFavourite(){
         } else {
           // No user is signed in.
           hideLoading();
-
         }
       });
 }

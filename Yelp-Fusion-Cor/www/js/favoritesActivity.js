@@ -6,8 +6,6 @@ class Search {
       this.gpsLocation = gpsLocation;
     }
 }
-
-
 var firebaseConfig = {
     apiKey: "AIzaSyDJ0__ksJsXa65LhM4Yl3R7JDrdJi70pXg",
     authDomain: "yelpfusioncor.firebaseapp.com",
@@ -19,21 +17,14 @@ var firebaseConfig = {
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-
-
-
 showLoading();
 showResults();
-
-
-
 function showResults(){
-
     var properties = [];
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
-          firebase.database().ref('users/' + user.uid + '/favourite').once('value').then((snapshot) => {
+          firebase.database().ref('users/' + user.uid + '/Favorites').once('value').then((snapshot) => {
                 snapshot.forEach(function(child) {
                     console.log(child.key+': '+child.val());
                     var title = child.val().title;
@@ -56,13 +47,10 @@ function showResults(){
         }
       });
 }
-
 function displayList(properties){
       // Get the unordered list and create li elements and assign properties to it like id, onclick, child
       var ul = document.getElementById("propertyList");
       for(i = 0; i < properties.length; i++){
- 
- 
          var div = document.createElement("div");
          var lable = document.createElement("lable");
          lable.innerHTML = properties[i].title;
@@ -71,45 +59,34 @@ function displayList(properties){
          button.style.backgroundColor = "red";
          button.style.position = "absolute";
          button.style.left = "75%"
-
- 
          button.onclick = (function(i) {
              return function() {
                  // To send the property object we stringify it using JSON 
                  // localStorage.setItem("property", JSON.stringify(properties[i]));
                  // window.location='itemSelectedActivity.html';
-
-                 deleteFavourite(properties[i].id)
- 
+                 deleteFavorites(properties[i].id)
          };})(i);
          div.appendChild(lable);
          div.appendChild(button);
          div.appendChild
- 
           var li = document.createElement("li");
           li.appendChild(div);    
           ul.appendChild(li);
       }
 }
-
-
-
 function showLoading() {
   var x = document.getElementById("loading");
   x.style.display = "block";
 }
-
 function hideLoading() {
   var x = document.getElementById("loading");
   x.style.display = "none";
 }
-
-
-function deleteFavourite(id){
+function deleteFavorites(id){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
-          firebase.database().ref('users/' + user.uid + '/favourite/'+id).remove().then(() => {
+          firebase.database().ref('users/' + user.uid + '/Favorites/'+id).remove().then(() => {
               location.reload();
         }).catch((error) => {
             var errorCode = error.code;
